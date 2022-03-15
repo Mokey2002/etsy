@@ -21,7 +21,8 @@ class Navbar extends Component {
             navLogin = (
                 <ul class="nav navbar-nav navbar-right">
                         <li><Link to="/" onClick = {this.handleLogout}><span class="glyphicon glyphicon-user"></span>Logout</Link></li>
-                        <li><Link to="/" onClick = {this.handleLogout}><span class="glyphicon glyphicon-user"></span>Update Profile</Link></li>
+                        <li><Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link></li>
+                        <li><Link to="/update"><span class="glyphicon glyphicon-user"></span>Favorites</Link></li>
                 </ul>
             );
         }else{
