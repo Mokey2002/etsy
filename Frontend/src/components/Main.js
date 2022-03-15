@@ -7,6 +7,8 @@ import Create from './Create/Create';
 import Navbar from './LandingPage/Navbar';
 import Register from './Register/Register';
 import Update from './Update/Update';
+import Favorites from './Favorites/Favorites';
+import SRegister from './SRegister/SRegister';
 
 //Create a Main Component
 class Main extends Component {
@@ -21,6 +23,8 @@ class Main extends Component {
                 <Route path="/create" component={Create}/>
                 <Route path="/register" component={Register}/>
                 <Route path="/update" component={Update}/>
+                <Route path="/favorites" component={Favorites}/>
+                <Route path="/shop_register" component={SRegister}/>
             </div>
         )
     }

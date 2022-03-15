@@ -3,7 +3,10 @@ import '../../App.css';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
-
+import au from '../img/ua.jpg';
+import {Link} from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 class Home extends Component {
     constructor(){
         super();
@@ -42,7 +45,33 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-                    <h2>List of All Books</h2>
+
+                <div class="outer">
+                <img src={au} class="rounded" ></img>
+    <div class="inner">
+
+    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
+    <label></label>
+    </div>
+  </div>
+
+
+                    <h2>Favorite Items</h2>
+
+<div class="d-inline ">
+  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+  <button type="button" class="btn btn-primary">
+  <FontAwesomeIcon icon={faSearch} />
+  </button>
+</div>
+<form class="form-inline">
+  <div class="form-group ">
+    <label for="inputPassword2" class="sr-only">Password</label>
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+  </div>
+  <button type="submit" class="btn btn-primary mb-2">Search</button>
+</form>
+
                         <table class="table">
                             <thead>
                                 <tr>
@@ -53,7 +82,23 @@ class Home extends Component {
                             </thead>
                             <tbody>
                                 {/*Display the Tbale row based on data recieved*/}
-                                {details}
+                                {/*details*/}
+                                <div class="outer">
+                <img src={au} class="rounded" ></img>
+    <div class="inner">
+
+    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
+    <label></label>
+    </div>
+  </div>
+  <div class="outer">
+                <img src={au} class="rounded" ></img>
+    <div class="inner">
+
+    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
+    <label></label>
+    </div>
+  </div>
                             </tbody>
                         </table>
                 </div> 
