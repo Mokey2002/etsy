@@ -3,10 +3,7 @@ import '../../App.css';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
-import au from '../img/ua.jpg';
-import {Link} from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+
 class Home extends Component {
     constructor(){
         super();
@@ -45,28 +42,7 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-
-                <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
-
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
-
-
-                    <h2>Favorite Items</h2>
-                    <div class="input-group">
-  <div class="form-outline">
-    <input type="search" id="form1" class="form-control" />
-    <button type="button" class="btn btn-primary">
-  <FontAwesomeIcon icon={faSearch} />
-  </button>
-
-  </div>
-</div>
-
+                    <h2>List of All Books</h2>
                         <table class="table">
                             <thead>
                                 <tr>
