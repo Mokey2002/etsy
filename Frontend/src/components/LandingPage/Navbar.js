@@ -21,6 +21,7 @@ class Navbar extends Component {
             navLogin = (
                 <ul class="nav navbar-nav navbar-right">
                         <li><Link to="/" onClick = {this.handleLogout}><span class="glyphicon glyphicon-user"></span>Logout</Link></li>
+                        <li><Link to="/" onClick = {this.handleLogout}><span class="glyphicon glyphicon-user"></span>Update Profile</Link></li>
                 </ul>
             );
         }else{
@@ -28,8 +29,11 @@ class Navbar extends Component {
             console.log("Not Able to read cookie");
             navLogin = (
                 <ul class="nav navbar-nav navbar-right">
-                        <li><Link to="/login"><span class="glyphicon glyphicon-log-in"></span> Login</Link></li>
+                        <li><Link to="/login"><span class="glyphicon glyphicon-log-in"></span> Sign in</Link></li>
+                        <li><Link to="/register"><span class="glyphicon glyphicon-register"></span> Register</Link></li>
                 </ul>
+                
+                
             )
         }
         let redirectVar = null;
@@ -49,6 +53,7 @@ class Navbar extends Component {
                         <li><Link to="/create">Add a Book</Link></li>
                         <li><Link to="/delete">Delete a Book</Link></li>
                     </ul>
+
                     {navLogin}
                 </div>
             </nav>

@@ -5,6 +5,7 @@ import Home from './Home/Home';
 import Delete from './Delete/Delete';
 import Create from './Create/Create';
 import Navbar from './LandingPage/Navbar';
+import Register from './Register/Register';
 //Create a Main Component
 class Main extends Component {
     render(){
@@ -16,6 +17,7 @@ class Main extends Component {
                 <Route path="/home" component={Home}/>
                 <Route path="/delete" component={Delete}/>
                 <Route path="/create" component={Create}/>
+                <Route path="/register" component={Register}/>
             </div>
         )
     }
