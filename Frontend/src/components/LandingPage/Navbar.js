@@ -24,6 +24,7 @@ class Navbar extends Component {
                         <li><Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link></li>
                         <li><Link to="/favorites"><span class="glyphicon glyphicon-user"></span>Favorites</Link></li>
                         <li><Link to="/shop_register"><span class="glyphicon glyphicon-user"></span>Seller Registration</Link></li>
+                        <li><Link to="/shop"><span class="glyphicon glyphicon-user"></span>Shop</Link></li>
                 </ul>
             );
         }else{
@@ -48,7 +49,7 @@ class Navbar extends Component {
             <nav class="navbar navbar-inverse">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand">Book Store App</a>
+                        <a class="navbar-brand">Etsy</a>
                     </div>
                     <ul class="nav navbar-nav">
                         <li class="active"><Link to="/home">Home</Link></li>

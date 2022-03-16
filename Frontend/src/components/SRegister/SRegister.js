@@ -45,62 +45,15 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-
-                <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
-
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
-
-
-                    <h2>Favorite Items</h2>
-
-<div class="d-inline ">
-  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  <button type="button" class="btn btn-primary">
-  <FontAwesomeIcon icon={faSearch} />
-  </button>
-</div>
+                    <h2>Name your Shop</h2>
 <form class="form-inline">
   <div class="form-group ">
     <label for="inputPassword2" class="sr-only">Password</label>
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <input type="search" class="form-control rounded" placeholder="Shop Name" aria-label="Search" aria-describedby="search-addon" />
   </div>
-  <button type="submit" class="btn btn-primary mb-2">Search</button>
+  <button type="submit" class="btn btn-primary mb-2">Check</button>
 </form>
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Book ID</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/*Display the Tbale row based on data recieved*/}
-                                {/*details*/}
-                                <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
-
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
-  <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
-
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
-                            </tbody>
-                        </table>
                 </div> 
             </div> 
         )

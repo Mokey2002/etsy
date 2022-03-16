@@ -9,6 +9,7 @@ import Register from './Register/Register';
 import Update from './Update/Update';
 import Favorites from './Favorites/Favorites';
 import SRegister from './SRegister/SRegister';
+import Shop from './Shop/Shop';
 
 //Create a Main Component
 class Main extends Component {
@@ -25,6 +26,7 @@ class Main extends Component {
                 <Route path="/update" component={Update}/>
                 <Route path="/favorites" component={Favorites}/>
                 <Route path="/shop_register" component={SRegister}/>
+                <Route path="/shop" component={Shop}/>
             </div>
         )
     }
