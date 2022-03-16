@@ -100,9 +100,10 @@ class Create extends Component{
 
         e.preventDefault();
         const data = {
+            street : this.state.street,
             name : this.state.name,
             age : this.state.age,
-            eamil : this.state.email,
+            email : this.state.email,
             phone : this.state.phone,
             city : this.state.city,
             country : this.state.country,

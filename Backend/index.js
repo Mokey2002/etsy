@@ -208,15 +208,22 @@ app.post('/register', (req,res) => {
     let zip = req.body.zip;
     let phone = req.body.phone;
     let country = req.body.country;
-
+    console.log("Register")
+    console.log(req.body)
+    console.log("Register")
    // bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query(
-            "INSERT INTO users (Name, Phone, City,Age,Email,Zip,Country,User,street,password) VALUES (?,?,?)",
+            "INSERT INTO user (Name, Phone, City,Age,Email,Zip,Country,User,street,password) VALUES (?,?,?,?,?,?,?,?,?,?)",
             [name, phone,city,age,email,zip,country,user,street,password],
 
 
             (err, result) => {
-            if(err) {
+                console.log("result");
+                console.log(result);
+                console.log(err);
+                console.log("result");
+          
+          /*      if(err) {
                 res.send({err: err})
             }
             if (result){
@@ -232,7 +239,7 @@ app.post('/register', (req,res) => {
                     'Content-Type' : 'text/plain'
                 })
                 res.end("Unsuccessful Login");
-            }
+            }*/
             }
         );
    // })
