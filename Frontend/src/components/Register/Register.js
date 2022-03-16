@@ -18,7 +18,9 @@ class Create extends Component{
             email : "",
             phone: "",
             city : "",
-            country : ""
+            country : "",
+            user:"",
+            password:""
         }
         //Bind the handlers to this class
         this.namehandler = this.namehandler.bind(this);
@@ -29,6 +31,8 @@ class Create extends Component{
         this.phonehandler = this.phonehandler.bind(this);
         this.cityhandler = this.cityhandler.bind(this);
         this.countryhandler = this.countryhandler.bind(this);
+        this.passwordhandler = this.passwordhandler.bind(this);
+        this.userhandler = this.userhandler.bind(this);
         
         this.submitLogin = this.submitLogin.bind(this);
     }
@@ -36,59 +40,75 @@ class Create extends Component{
     //title change handler
     namehandler = (e) => {
         this.setState({
-            booktitle : e.target.value
+            name : e.target.value
+        })
+    }
+        //title change handler
+        userhandler = (e) => {
+            this.setState({
+                user : e.target.value
+            })
+        }
+            //title change handler
+    passwordhandler = (e) => {
+        this.setState({
+            password : e.target.value
         })
     }
         //title change handler
         agehandler = (e) => {
             this.setState({
-                booktitle : e.target.value
+                age : e.target.value
             })
         }
             //title change handler
             streethandler = (e) => {
         this.setState({
-            booktitle : e.target.value
+            street : e.target.value
         })
     }
         //title change handler
         ziphandler = (e) => {
             this.setState({
-                booktitle : e.target.value
+                zip : e.target.value
             })
         }
             //title change handler
      emailhandler = (e) => {
         this.setState({
-            booktitle : e.target.value
+            email : e.target.value
         })
     }
-        //title change handler
-        phonehandler = (e) => {
-            this.setState({
-                booktitle : e.target.value
-            })
-        }
-            //title change handler
     cityhandler = (e) => {
         this.setState({
-            booktitle : e.target.value
+            city : e.target.value
         })
     }
-    //ID change handler
+    phonehandler = (e) => {
+        this.setState({
+            phone : e.target.value
+        })
+    }
     countryhandler = (e) => {
-            this.setState({
-                idnum : e.target.value
-            })
-        }
+        this.setState({
+            country : e.target.value
+        })
+    }
+
 
     submitLogin = (e) => {
 
         e.preventDefault();
         const data = {
-            idnum : this.state.idnum,
-            title : this.state.booktitle,
-            author : this.state.bookauthor
+            name : this.state.name,
+            age : this.state.age,
+            eamil : this.state.email,
+            phone : this.state.phone,
+            city : this.state.city,
+            country : this.state.country,
+            zip : this.state.zip,
+            user:this.state.user,
+            password:this.state.password
         }
         //send data to backend
         axios.post('http://localhost:3001/register',data)
@@ -134,42 +154,50 @@ class Create extends Component{
                         <div style={{width: '100%'}} class="form-group">
                         <div class="col col-lg-3">
                         <label> 
-                         Name:   <input  onChange ={this.idhandler} type="text" class="form-control" name="idnum" placeholder="Name" />
+                         Username:   <input  onChange ={this.userhandler} type="text" class="form-control" name="idnum" placeholder="Name" />
+                        </label>
+                        <br/>
+                        <label> 
+                         password:   <input  onChange ={this.passwordhandler} type="password" class="form-control" name="idnum" placeholder="Name" />
+                        </label>
+                        <br/>
+                        <label> 
+                         Name:   <input  onChange ={this.namehandler} type="text" class="form-control" name="idnum" placeholder="Name" />
                             
                         </label>
                         <br/>
                         <label>
-                           Age:     <input  onChange = {this.titlehandler} type="text" class="form-control" name="booktitle" placeholder="Age" />
+                           Age:     <input  onChange = {this.agehandler} type="text" class="form-control" name="booktitle" placeholder="Age" />
                         </label>
                         <br/>
                         <label>
                             Email:
-                                <input onChange = {this.authorhandler} type="text" class="form-control" name="bookauthor" placeholder="email"/>
+                                <input onChange = {this.emailhandler} type="text" class="form-control" name="bookauthor" placeholder="email"/>
                      </label>
                      </div>
                      <div class="col col-lg-2">
                      <label>
                             Phone:
-                                <input onChange = {this.authorhandler} type="text" class="form-control" name="bookauthor" placeholder="(xxx) xxx-xxxx"/>
+                                <input onChange = {this.phonehandler} type="text" class="form-control" name="bookauthor" placeholder="(xxx) xxx-xxxx"/>
                      </label>
                         <label>
                             Street:
-                                <input onChange = {this.authorhandler} type="text" class="form-control" name="bookauthor" placeholder="Street"/>
+                                <input onChange = {this.streethandler} type="text" class="form-control" name="bookauthor" placeholder="Street"/>
                      </label>
                      <label>
                             Zip:
-                                <input onChange = {this.authorhandler} type="text" class="form-control" name="bookauthor" placeholder="Zip"/>
+                                <input onChange = {this.ziphandler} type="text" class="form-control" name="bookauthor" placeholder="Zip"/>
                      </label>
                      </div>
                      <div class="col col-lg-2">
                         <label>
                             City:
-                                <input onChange = {this.authorhandler} type="text" class="form-control" name="bookauthor" placeholder="City"/>
+                                <input onChange = {this.cityhandler} type="text" class="form-control" name="bookauthor" placeholder="City"/>
                         </label>
                         <label>
                             Country:
                           
-<select id="country" name="country">
+<select id="country" name="country" onChange = {this.countryhandler}>
     <option>country</option>
     <option value="AF">Afghanistan</option>
     <option value="AX">Aland Islands</option>

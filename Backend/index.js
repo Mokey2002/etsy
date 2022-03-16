@@ -6,6 +6,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
 app.set('view engine', 'ejs');
+const mysql = require('mysql2');
 
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
@@ -46,6 +47,14 @@ app.use(function(req, res, next) {
     {"BookID" : "3", "Title" : "Book 3", "Author" : "Author 3"}
 ]
 
+//// create the connection to database
+//
+  const db = mysql.createConnection({
+    user: "root",
+    host: "localhost",
+    password: "root",
+    database: "hw4"
+});
 //Route to handle Post Request Call
 app.post('/login',function(req,res){
     
@@ -59,6 +68,9 @@ app.post('/login',function(req,res){
     console.log("Req Body : ",req.body);
     Users.filter(function(user){
         if(user.username === req.body.username && user.password === req.body.password){
+
+
+            
             res.cookie('cookie',"admin",{maxAge: 900000, httpOnly: false, path : '/'});
             req.session.user = user;
             res.writeHead(200,{
@@ -182,6 +194,51 @@ app.post('/delete', function (req, res) {
         res.end(" Book not in DB");
     }
 });
+
+
+//register api
+app.post('/register', (req,res) => {
+    let name = req.body.name;
+    let email = req.body.email;
+    let password = req.body.password;
+    let user = req.body.user;
+    let city = req.body.city;
+    let age = req.body.age;
+    let street = req.body.street;
+    let zip = req.body.zip;
+    let phone = req.body.phone;
+    let country = req.body.country;
+
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+            "INSERT INTO users (Name, Phone, City,Age,Email,Zip,Country,User,street,password) VALUES (?,?,?)",
+            [name, phone,city,age,email,zip,country,user,street,password],
+
+
+            (err, result) => {
+            if(err) {
+                res.send({err: err})
+            }
+            if (result){
+                //return succes to front end
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful Login");
+            }
+            else{
+                //return unsuccesful to front end
+                res.writeHead(201,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Unsuccessful Login");
+            }
+            }
+        );
+   // })
+    
+});
+
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001");
