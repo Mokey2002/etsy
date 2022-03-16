@@ -67,6 +67,9 @@ app.post('/login',function(req,res){
     //console.log("Req Body : ", username + "password : ",password);
     console.log("Req Body : ",req.body);
     Users.filter(function(user){
+        console.log("USER LOGIN");
+        console.log(user);
+        console.log("USER LOGIN");
         if(user.username === req.body.username && user.password === req.body.password){
 
 
@@ -200,7 +203,7 @@ app.post('/delete', function (req, res) {
 app.post('/register', (req,res) => {
     let name = req.body.name;
     let email = req.body.email;
-    let password = req.body.password;
+    let passwordn = req.body.password;
     let user = req.body.user;
     let city = req.body.city;
     let age = req.body.age;
@@ -214,7 +217,7 @@ app.post('/register', (req,res) => {
    // bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query(
             "INSERT INTO user (Name, Phone, City,Age,Email,Zip,Country,User,street,password) VALUES (?,?,?,?,?,?,?,?,?,?)",
-            [name, phone,city,age,email,zip,country,user,street,password],
+            [name, phone,city,age,email,zip,country,user,street,passwordn],
 
 
             (err, result) => {
@@ -222,11 +225,13 @@ app.post('/register', (req,res) => {
                 console.log(result);
                 console.log(err);
                 console.log("result");
-          
-          /*      if(err) {
+
+            if(err) {
                 res.send({err: err})
             }
             if (result){
+                res.cookie('cookie',user,{maxAge: 900000, httpOnly: false, path : '/'});
+                req.session.user ={ username: user, password: passwordn };
                 //return succes to front end
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'
@@ -239,7 +244,7 @@ app.post('/register', (req,res) => {
                     'Content-Type' : 'text/plain'
                 })
                 res.end("Unsuccessful Login");
-            }*/
+            }
             }
         );
    // })

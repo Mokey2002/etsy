@@ -114,7 +114,7 @@ class Create extends Component{
         //send data to backend
         axios.post('http://localhost:3001/register',data)
             .then(response => {
-                console.log("Status Code create : ",response.status);
+                console.log("Status Code Register : ",response.status);
                 if(response.status === 200){
                     this.setState({
                         successflag : true,
@@ -136,7 +136,10 @@ class Create extends Component{
         let repeteatedid;
         let {duplicateid} = this.state;
         //check if user logged in
-
+        //if redirect if added successfully
+        if(successflag){
+            success = <Redirect to = "/home"/>
+        }
         //tell user that id is alredy in DB
         if(duplicateid){
             repeteatedid = 
