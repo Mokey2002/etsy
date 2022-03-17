@@ -66,10 +66,43 @@ app.post('/login',function(req,res){
     console.log("Inside Login Post Request");
     //console.log("Req Body : ", username + "password : ",password);
     console.log("Req Body : ",req.body);
+
+    db.query(
+        "SELECT name From user  where User =? and password =?",
+        [req.body.username, req.body.password],
+        (err, result) => {
+            console.log("result");
+            console.log(result);
+            console.log(err);
+            console.log("result");
+
+        if(err) {
+            res.send({err: err})
+        }
+        if (result.length > 0 ){
+            res.cookie('cookie',req.body.username,{maxAge: 900000, httpOnly: false, path : '/'});
+            req.session.user ={ username: req.body.user, password: req.body.password };
+            //return succes to front end
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Successful Login");
+        }
+        else{
+            //return unsuccesful to front end
+            res.writeHead(201,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Unsuccessful Login");
+        }
+        }
+    );
+
+    /*
     Users.filter(function(user){
         console.log("USER LOGIN");
         console.log(user);
-        console.log("USER LOGIN");
+        console.log("USER LOGIN");        
         if(user.username === req.body.username && user.password === req.body.password){
 
 
@@ -89,7 +122,7 @@ app.post('/login',function(req,res){
             res.end("Unsuccessful Login");
 
             }
-    })
+    })*/
 
     
 });
@@ -218,8 +251,6 @@ app.post('/register', (req,res) => {
         db.query(
             "INSERT INTO user (Name, Phone, City,Age,Email,Zip,Country,User,street,password) VALUES (?,?,?,?,?,?,?,?,?,?)",
             [name, phone,city,age,email,zip,country,user,street,passwordn],
-
-
             (err, result) => {
                 console.log("result");
                 console.log(result);
