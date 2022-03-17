@@ -127,6 +127,45 @@ app.post('/login',function(req,res){
     
 });
 
+//Handle usre info to update
+app.post('/getuserinfo',function(req,res){
+    
+    console.log("Inside update get info   Request");
+    //console.log("Req Body : ", username + "password : ",password);
+    console.log("Req Body : ",req.body);
+
+    db.query(
+        "SELECT * From user  where User =?",
+        [req.body.username],
+        (err, result) => {
+            console.log("result");
+            console.log(result);
+            console.log(err);
+            console.log("result");
+
+        if(err) {
+            res.send({err: err})
+        }
+        if (result.length > 0 ){
+           // {user}JSON.stringify(books)
+            //return succes to front end
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result[0]));
+        }
+        else{
+            //return unsuccesful to front end
+            res.writeHead(201,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("Unsuccessful Login");
+        }
+        }
+    );
+    
+});
+
 //Route to get All Books when user visits the Home Page
 app.get('/home', function(req,res){
     console.log("Inside Home Login");    
