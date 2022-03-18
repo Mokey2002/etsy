@@ -8,50 +8,85 @@ import {Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 class Home extends Component {
-    constructor(){
-        super();
-        this.state = {  
-            books : []
+    constructor(props){
+        super(props);
+        this.state = {
+            shopname : "",
+            username:cookie.load('cookie'),
+            successflag: false,
+            validid: false
         }
-    }  
-    //get the books data from backend  
-    componentDidMount(){
-        axios.get('http://localhost:3001/home')
-                .then((response) => {
-                //update the state with the response data
-                this.setState({
-                    books : this.state.books.concat(response.data) 
-                });
-            });
+        this.shopnameHandler = this.shopnameHandler.bind(this);
+    }
+    
+    //id  change handler
+    shopnameHandler = (e) => {
+        this.setState({
+            shopname : e.target.value
+        })
     }
 
-    render(){
-        //iterate over books to create a table row
-        let details = this.state.books.map(book => {
-            return(
-                <tr>
-                    <td>{book.BookID}</td>
-                    <td>{book.Title}</td>
-                    <td>{book.Author}</td>
-                </tr>
-            )
-        })
-        //if not logged in go to login page
-        let redirectVar = null;
-        if(!cookie.load('cookie')){
-            redirectVar = <Redirect to= "/login"/>
+        //sbumit change handler
+        submitLogin = (e) =>{
+            e.preventDefault();
+            const data = {
+                shopname : this.state.shopname,
+                username: cookie.load('cookie')
+            }
+            //send datat to backend
+            axios.post('http://localhost:3001/check',data).then((response) => {
+                console.log(response.data);
+                if(response.status === 200){
+                    this.setState({
+                        successflag: true,
+                        validid : false
+                    })
+                } else if(response.status === 201){
+                    this.setState({
+                        successflag: false,
+                        validid : true
+                    })
+                }
+            })
         }
+
+
+    render(){
+
+                //set values
+                let {successflag} = this.state;
+                let {validid} = this.state;
+                let success = null;
+                let loginredirect = null;
+                let invalidID;
+                //check if user is logged in
+                if(!cookie.load('cookie')){
+                    loginredirect = <Redirect to = "/login"/>
+                }
+                //delete successful
+                if(successflag){
+                    success = <Redirect to = "/shop"/>
+                }
+                //lets user know if id is on DB
+                if(validid){
+                    invalidID =    <div class="alert alert-danger" role="alert">
+                    <td>"Shop name already taken"</td> 
+                </div>
+                }
+ 
         return(
             <div>
-                {redirectVar}
+                {loginredirect}
+                {invalidID}
+                {success}
                 <div class="container">
                     <h2>Name your Shop</h2>
 <form class="form-inline">
   <div class="form-group ">
     <label for="inputPassword2" class="sr-only">Password</label>
-    <input type="search" class="form-control rounded" placeholder="Shop Name" aria-label="Search" aria-describedby="search-addon" />
+    <input type="search"  onChange = {this.shopnameHandler}  class="form-control rounded" placeholder="Shop Name" aria-label="Search" aria-describedby="search-addon" />
   </div>
-  <button type="submit" class="btn btn-primary mb-2">Check</button>
+  <button type="submit" onClick = {this.submitLogin} class="btn btn-primary mb-2">Check</button>
 </form>
 
                 </div> 

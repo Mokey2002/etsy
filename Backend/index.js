@@ -223,6 +223,7 @@ app.post('/create', function (req, res) {
             res.end(" Book alrady in DB");
         }
 });
+
 app.post('/delete', function (req, res) {
     console.log(req.body);
     let id = req.body;
@@ -269,7 +270,43 @@ app.post('/delete', function (req, res) {
         res.end(" Book not in DB");
     }
 });
+//check if shopname is valid
+app.post('/check', function (req, res) {
+    db.query(
+        "SELECT * From shop  where username =? and shopname=?",
+        [req.body.username,req.body.shopname],
+        (err, result) => {
+            console.log("result");
+            console.log(result);
+            console.log(err);
+            console.log("result");
 
+        if(err) {
+            res.send({err: err})
+        }
+        if (result.length > 0 ){
+           // {user}JSON.stringify(books)
+            //return succes to front end
+            res.writeHead(201,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end("invalid");
+        }
+        else{
+            db.query(
+                "INSERT INTO shop (username,shopname) values(?,?)",
+                [req.body.username,req.body.shopname]
+            );
+                        console.log("exiting insert into shop")
+                        //return unsuccesful to front end
+                        res.writeHead(200,{
+                            'Content-Type' : 'text/plain'
+                        })
+                        res.end("Unsuccessful Login");
+        }
+        }
+    );
+});
 
 //register api
 app.post('/register', (req,res) => {
