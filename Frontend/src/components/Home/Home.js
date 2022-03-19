@@ -8,9 +8,12 @@ class Home extends Component {
     constructor(){
         super();
         this.state = {  
-            books : []
+          items:[]
+          //  books : []
         }
     }  
+
+    /*
     //get the books data from backend  
     componentDidMount(){
         axios.get('http://localhost:3001/home')
@@ -20,16 +23,45 @@ class Home extends Component {
                     books : this.state.books.concat(response.data) 
                 });
             });
+    }*/
+    componentDidMount(){
+        const data={
+            username: cookie.load('cookie'),
+
+        }
+        axios.post('http://localhost:3001/getallshop',data)
+                .then((response) => {
+
+
+                    if(response.status === 200){
+                        this.setState({
+                            
+                            items : this.state.items.concat(response.data) 
+                        })
+                    } else if(response.status === 201){
+                        this.setState({
+                            
+                            items : this.state.items.concat(response.data)  
+                        })
+                    }
+
+                //update the state with the response data
+              //  this.setState({
+              //      books : this.state.books.concat(response.data) 
+               // });
+            });
     }
 
     render(){
         //iterate over books to create a table row
-        let details = this.state.books.map(book => {
+        let details = this.state.items.map(item => {
             return(
                 <tr>
-                    <td>{book.BookID}</td>
-                    <td>{book.Title}</td>
-                    <td>{book.Author}</td>
+                 <td>{item.itemname}   <div class="left">
+              <button  onClick = {this.submitLogin}  type="button" class="btn btn-primary">Like</button>
+            </div></td>
+                <td>{item.price}</td>
+
                 </tr>
             )
         })
@@ -42,13 +74,13 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-                    <h2>List of All Books</h2>
+                    <h2>Items</h2>
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Book ID</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>

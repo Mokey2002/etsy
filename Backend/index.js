@@ -308,7 +308,27 @@ app.post('/check', function (req, res) {
     );
 });
 
-
+//get all items for landing
+app.post('/getallshop', function (req, res) {
+    db.query(
+        "SELECT * From shop ",
+        [],
+        (err, result) => {
+            console.log("result");
+            console.log(result);
+            console.log(err);
+            console.log("result");
+        if (result.length > 0 ){
+           // {user}JSON.stringify(books)
+            //return succes to front end
+            res.writeHead(201,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result));
+        }
+        }
+    );
+});
 
 //gets shopdata
 app.post('/shopdata', function (req, res) {
