@@ -308,6 +308,48 @@ app.post('/check', function (req, res) {
     );
 });
 
+
+
+//gets shopdata
+app.post('/shopdata', function (req, res) {
+    db.query(
+        "SELECT * From shop  where username =?",
+        [req.body.username],
+        (err, result) => {
+            console.log("shoopdata");
+            console.log(result);
+            console.log(err);
+            console.log("shoopdata");
+        if(err) {
+            res.send({err: err})
+        }
+        if (result.length > 0 ){
+           // {user}JSON.stringify(books)
+            //return succes to front end
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result));
+        }
+        else{
+            db.query(
+                "SELECT * From shop  where shopname=?"
+                [req.body.shopname],
+                (err, result) => {
+
+                    console.log("exiting insert into shop")
+                    //return unsuccesful to front end
+                    res.writeHead(201,{
+                        'Content-Type' : 'text/plain'
+                    })
+                    res.end(JSON.stringify(result));
+
+                }
+            );
+        }
+        }
+    );
+});
 //register api
 app.post('/register', (req,res) => {
     let name = req.body.name;

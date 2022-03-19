@@ -11,17 +11,37 @@ class Home extends Component {
     constructor(){
         super();
         this.state = {  
+            owner: false,
+            items:  [],
             books : []
         }
     }  
     //get the books data from backend  
     componentDidMount(){
-        axios.get('http://localhost:3001/home')
+        const data={
+            username: cookie.load('cookie'),
+
+        }
+        axios.post('http://localhost:3001/shopdata',data)
                 .then((response) => {
+
+
+                    if(response.status === 200){
+                        this.setState({
+                            owner: true,
+                            items : this.state.items.concat(response.data) 
+                        })
+                    } else if(response.status === 201){
+                        this.setState({
+                            owner:false,
+                            books : this.state.items.concat(response.data) 
+                        })
+                    }
+
                 //update the state with the response data
-                this.setState({
-                    books : this.state.books.concat(response.data) 
-                });
+              //  this.setState({
+              //      books : this.state.books.concat(response.data) 
+               // });
             });
     }
 
@@ -38,8 +58,18 @@ class Home extends Component {
         })
         //if not logged in go to login page
         let redirectVar = null;
+        let shopowner= null;
+        let sales = null;
+        let {owner} = this.state;
         if(!cookie.load('cookie')){
             redirectVar = <Redirect to= "/login"/>
+        }
+        if(owner){
+            shopowner = <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
+            sales = <div class="form-group ">
+            <label for="sales" class="sr-only">sales</label>
+            <p name="sales" id="sales">  </p>
+          </div>
         }
         return(
             <div>
@@ -50,7 +80,7 @@ class Home extends Component {
                 <img src={au} class="rounded" ></img>
     <div class="inner">
 
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
+    {shopowner}
     <label></label>
     </div>
   </div>
@@ -69,6 +99,8 @@ class Home extends Component {
     <label for="inputPassword2" class="sr-only">Password</label>
     <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
   </div>
+  <br></br>
+  {sales}
   <button type="submit" class="btn btn-primary mb-2">Search</button>
 </form>
 
