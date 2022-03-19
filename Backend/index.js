@@ -400,6 +400,53 @@ app.post('/register', (req,res) => {
     
 });
 
+//Insert new item
+app.post('/additem', (req,res) => {
+    let name = req.body.itemname;
+    let category = req.body.category;
+    let description = req.body.description;
+    let price = req.body.price;
+    let quantity = req.body.quantity;
+    let photo = req.body.photo;
+
+    console.log("Register")
+    console.log(req.body)
+    console.log("Register")
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+            "INSERT INTO user (Name, Phone, City,Age,Email,Zip,Country,User,street,password) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            [name, phone,city,age,email,zip,country,user,street,passwordn],
+            (err, result) => {
+                console.log("result");
+                console.log(result);
+                console.log(err);
+                console.log("result");
+
+            if(err) {
+                res.send({err: err})
+            }
+            if (result){
+                res.cookie('cookie',user,{maxAge: 900000, httpOnly: false, path : '/'});
+                req.session.user ={ username: user, password: passwordn };
+                //return succes to front end
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful Login");
+            }
+            else{
+                //return unsuccesful to front end
+                res.writeHead(201,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Unsuccessful Login");
+            }
+            }
+        );
+   // })
+    
+});
+
 //start your server on port 3001
 app.listen(3001);
 console.log("Server Listening on port 3001");
