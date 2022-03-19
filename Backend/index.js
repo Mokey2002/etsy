@@ -326,6 +326,9 @@ app.post('/shopdata', function (req, res) {
         if (result.length > 0 ){
            // {user}JSON.stringify(books)
             //return succes to front end
+            console.log("******");
+            console.log(result);
+            console.log("******");
             res.writeHead(200,{
                 'Content-Type' : 'text/plain'
             })
@@ -402,6 +405,7 @@ app.post('/register', (req,res) => {
 
 //Insert new item
 app.post('/additem', (req,res) => {
+    let username = req.body.username;
     let name = req.body.itemname;
     let category = req.body.category;
     let description = req.body.description;
@@ -414,8 +418,8 @@ app.post('/additem', (req,res) => {
     console.log("Register")
    // bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query(
-            "INSERT INTO user (Name, Phone, City,Age,Email,Zip,Country,User,street,password) VALUES (?,?,?,?,?,?,?,?,?,?)",
-            [name, phone,city,age,email,zip,country,user,street,passwordn],
+            "INSERT INTO shop (username, itemname,category,description,price,quantity,photo) VALUES (?,?,?,?,?,?,?)",
+            [username,name,category,description,price,quantity,photo],
             (err, result) => {
                 console.log("result");
                 console.log(result);
@@ -426,8 +430,6 @@ app.post('/additem', (req,res) => {
                 res.send({err: err})
             }
             if (result){
-                res.cookie('cookie',user,{maxAge: 900000, httpOnly: false, path : '/'});
-                req.session.user ={ username: user, password: passwordn };
                 //return succes to front end
                 res.writeHead(200,{
                     'Content-Type' : 'text/plain'

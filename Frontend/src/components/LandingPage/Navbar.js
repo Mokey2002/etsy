@@ -26,7 +26,7 @@ class Navbar extends Component {
                         <li><Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link></li>
                         <li><Link to="/favorites"><span class="glyphicon glyphicon-user"></span>Favorites</Link></li>
                         <li><Link to="/shop_register"><span class="glyphicon glyphicon-user"></span>Seller Registration</Link></li>
-                        <li><Link to="/shop"><span class="glyphicon glyphicon-user"></span>Shop</Link></li>
+                        <li><Link to="/shop"><span class="glyphicon glyphicon-user"></span> My Shop</Link></li>
                         <li><Link to="/purchases"><span class="glyphicon glyphicon-user"></span>Purchases</Link></li>
                         <li><Link to="/cart"><span class="glyphicon glyphicon glyphicon-shopping-cart
 "></span></Link></li>

@@ -13,13 +13,15 @@ class Create extends Component {
         super(props);
         this.state = {  
             owner: false,
+            added:false,
             items:  [],
             itemname : "",
             category:"",
             description : "",
             price: "",
             quantity : "",
-            photo : ""
+            photo : "",
+            
         }
 
                 //Bind the handlers to this class
@@ -35,7 +37,7 @@ class Create extends Component {
         //title change handler
         itemnamehandler = (e) => {
             this.setState({
-                username : e.target.value
+                itemname : e.target.value
             })
         }
             //title change handler
@@ -73,7 +75,7 @@ class Create extends Component {
 
         e.preventDefault();
         const data = {
-
+            username: cookie.load('cookie'),
             itemname : this.state.itemname,
             category:this.state.category,
             description : this.state.description,
@@ -87,8 +89,7 @@ class Create extends Component {
                 console.log("Status Code Register : ",response.status);
                 if(response.status === 200){
                     this.setState({
-                        successflag : true,
-                        duplicateid : false
+                        added : true
                     })
                 }else if(response.status === 201){
                     this.setState({
@@ -116,7 +117,7 @@ class Create extends Component {
                     } else if(response.status === 201){
                         this.setState({
                             owner:false,
-                            books : this.state.items.concat(response.data) 
+                            items : this.state.items.concat(response.data)  
                         })
                     }
 
@@ -129,26 +130,30 @@ class Create extends Component {
 
     render(){
         //iterate over books to create a table row
-     /*   let details = this.state.books.map(book => {
-            return(
-                <tr>
-                    <td>{book.BookID}</td>
-                    <td>{book.Title}</td>
-                    <td>{book.Author}</td>
-                </tr>
-            )
-        })*/
+
         //if not logged in go to login page
         let redirectVar = null;
         let shopowner= null;
         let sales = null;
         let {owner} = this.state;
+        let {added} = this.state;
         let additem = null;
         let modalval = null;
+        let addsuccess= null;
+        let editowner = null;
         if(!cookie.load('cookie')){
             redirectVar = <Redirect to= "/login"/>
         }
+        if (added){
+            addsuccess =    <div class="alert alert-danger" role="alert">
+            <td>"Item added"</td> 
+        </div>
+
+        }
         if(owner){
+            editowner = <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Edit item
+          </button>
             shopowner = <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
             sales = <div class="form-group ">
             <label for="sales" class="sr-only">sales</label>
@@ -173,10 +178,11 @@ class Create extends Component {
                         <div class="col col-lg-3">
                         <label> 
                          Item name:   <input  onChange ={this.itemnamehandler} type="text" class="form-control" name="idnum" placeholder="Name" />
+                         
                         </label>
                         <br/>
                         <label> 
-                         Category:   <input  onChange ={this.categoryhandler} type="password" class="form-control" name="idnum" placeholder="Name" />
+                         Category:   <input  onChange ={this.categoryhandler} type="text" class="form-control" name="idnum" placeholder="Name" />
                         </label>
                         <br/>
                         <label> 
@@ -205,6 +211,7 @@ class Create extends Component {
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               <button  onClick = {this.submitLogin}  type="button" class="btn btn-primary">Add item</button>
             </div>
+            {addsuccess}
           </div>
         </div>
       </div>
@@ -212,6 +219,20 @@ class Create extends Component {
     
     
     }
+
+    let details = this.state.items.map(item => {
+        return(
+            <tr>
+                <td>{item.itemname}</td>
+                <td>{item.category}</td>
+                <td>{item.description}</td>
+                <td>{item.price}</td>
+                <td>{item.quantity}</td>
+                <td>{editowner}</td>
+
+            </tr>
+        )
+    })
 
         return(
             <div>
@@ -250,15 +271,18 @@ class Create extends Component {
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Book ID</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
+                                    <th>Item</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {/*Display the Tbale row based on data recieved*/}
-                                {/*details*/}
-                                <div class="outer">
+                                {details}
+       { /*                        <div class="outer">
                 <img src={au} class="rounded" ></img>
     <div class="inner">
 
@@ -273,7 +297,7 @@ class Create extends Component {
     <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
     <label></label>
     </div>
-  </div>
+        </div>*/}
                             </tbody>
                         </table>
                 </div> 
