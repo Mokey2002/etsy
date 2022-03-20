@@ -70,6 +70,12 @@ class Create extends Component {
             photo : e.target.value
         })
     }  
+    imageHandler= (event)=>{
+        this.setState({
+            photo : event.target.files[0]
+        })
+
+    }
     //add item
     submitLogin = (e) => {
 
@@ -83,8 +89,32 @@ class Create extends Component {
             quantity : this.state.quantity,
             photo : this.state.photo
         }
+
+        const file= this.state.photo;
+       // const data = cookie.load('cookie')// {  username:"adfafsd"}// cookie.load('cookie')}
+ 
+        const formData = new FormData()
+        formData.append('image',file)
+        formData.append('username', cookie.load('cookie'))
+        formData.append('itemname', this.state.itemname)
+        formData.append('category', this.state.category)
+        formData.append('description', this.state.description)
+        formData.append('price', this.state.price)
+        formData.append('quantity', this.state.quantity)
+        console.log("File");
+        console.log(data);
+        console.log("File");
+        /*axios.post('http://localhost:3001/api/image', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+        })*/
         //send data to backend
-        axios.post('http://localhost:3001/additem',data)
+        axios.post('http://localhost:3001/additem',formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+        })
             .then(response => {
                 console.log("Status Code Register : ",response.status);
                 if(response.status === 200){
@@ -202,7 +232,8 @@ class Create extends Component {
                      <div class="col col-lg-2">
                      <label>
                             Photo:
-                                <input onChange = {this.photohandler} type="text" class="form-control" name="bookauthor" placeholder="(xxx) xxx-xxxx"/>
+
+                    <input type="file" name="image" accept="image/*" multiple={false} onChange={this.imageHandler} />
                      </label>
                      </div>
                         </div>
@@ -223,11 +254,12 @@ class Create extends Component {
     let details = this.state.items.map(item => {
         return(
             <tr>
-                <td>{item.itemname}</td>
+                <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
                 <td>{item.category}</td>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
                 <td>{item.quantity}</td>
+                
                 <td>{editowner}</td>
 
             </tr>
@@ -276,6 +308,7 @@ class Create extends Component {
                                     <th>Description</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
+                                    
                                     <th>Edit</th>
                                 </tr>
                             </thead>

@@ -7,9 +7,31 @@ var cookieParser = require('cookie-parser');
 var cors = require('cors');
 app.set('view engine', 'ejs');
 const mysql = require('mysql2');
+const multer = require("multer");
+// uploads
+const storage = multer.diskStorage({
+    destination:(req,file,cb) =>{
+        cb(null,"./");
+    },
+    filename: function(req,file,cb){
+        const ext = file.mimetype.split("/")[1];
+        cb(null, 'uploads/'+file.originalname);
+
+    }
+});
+// uploads
+const upload = multer({
+    storage:storage
+})
+
+
 
 //use cors to allow cross origin resource sharing
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors(
+    { origin: 'http://localhost:3000', methods:["GET","POST"],credentials: true 
+
+
+}));
 
 //use express session to maintain session data
 app.use(session({
@@ -24,6 +46,84 @@ app.use(session({
 //     extended: true
 //   }));
 app.use(bodyParser.json());
+// uploads
+const path= require('path');
+// uploads
+app.use('/', express.static(path.join(__dirname, '/')));
+// uploads
+app.post("/api/image",upload.single('image'),(req,res,err)=>{
+
+
+    console.log("UPDATE USER IMAGE")
+   // console.log(res)
+    console.log(req.body.username[0])
+   // console.log(res)
+   console.log(req.body)
+   console.log(req.file);
+    console.log("UPDATE USER IMAGE")
+    if (1==2) {
+        res.send({ msg:'Only image files (jpg, jpeg, png) are allowed!'})}
+    else{
+
+        db.query(
+            "Update user SET  photo =? where User =?",
+            [req.file.originalname, req.body.username],
+            (err, result) => {
+                console.log("result");
+                console.log(result);
+                console.log(err);
+                console.log("result");
+    
+            if(err) {
+                console.log("error")
+                res.send({err: err})
+            }
+            if (result){
+               
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful IMAGE UPLOAD");
+            }
+            }
+        );
+
+
+    }
+
+});
+//GET IMG
+app.get("/api/image",(req,res)=>{
+    console.log(req.body)
+    console.log("Get  USER IMAGE")
+    console.log(req.body)
+        db.query(
+            "SELECT photo  FROM user where User =?",
+            [ req.body.username],
+            (err, result) => {
+                console.log("result selct photo of User");
+                console.log(result);
+                console.log(err);
+                console.log("result select photo of User");
+    
+            if(err) {
+                console.log("error")
+                res.send({err: err})
+            }
+            if (result){
+               
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful IMAGE UPLOAD");
+            }
+            }
+        );
+
+
+    
+
+});
 
 //Allow Access Control
 app.use(function(req, res, next) {
@@ -373,7 +473,7 @@ app.post('/shopdata', function (req, res) {
         }
     );
 });
-//register api
+//regiester api
 app.post('/register', (req,res) => {
     let name = req.body.name;
     let email = req.body.email;
@@ -422,24 +522,78 @@ app.post('/register', (req,res) => {
    // })
     
 });
+//update user api
+app.post('/updateuser', upload.single('image'),(req,res) => {
+    let name = req.body.name;
+    let email = req.body.email;
+    let passwordn = req.body.password;
+    let user = req.body.user;
+    let city = req.body.city;
+    let age = req.body.age;
+    let street = req.body.street;
+    let zip = req.body.zip;
+    let phone = req.body.phone;
+    let country = req.body.country;
+    console.log("Register")
+    console.log(req.body)
+    console.log("Register")
+    "Update user SET  photo =? where User =?",
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+            "Update user SET  photo =?, Name=?, Phone=?, City=?,Age=?,Email=?,Zip=?,Country=?,street=? where User =?",
+   
+            [req.file.originalname,name, phone,city,age,email,zip,country,street,user],
+            (err, result) => {
+                console.log("result");
+                console.log(result);
+                console.log(err);
+                console.log("result");
 
+            if(err) {
+                res.send({err: err})
+            }
+            if (result){
+                res.cookie('cookie',user,{maxAge: 900000, httpOnly: false, path : '/'});
+                req.session.user ={ username: user, password: passwordn };
+                //return succes to front end
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful Login");
+            }
+            else{
+                //return unsuccesful to front end
+                res.writeHead(201,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Unsuccessful Login");
+            }
+            }
+        );
+   // })
+    
+});
 //Insert new item
-app.post('/additem', (req,res) => {
+app.post('/additem', upload.single("image"),(req,res) => {
+    console.log("Register")
+    console.log(req.body)
+    console.log("Register")
     let username = req.body.username;
     let name = req.body.itemname;
     let category = req.body.category;
     let description = req.body.description;
     let price = req.body.price;
     let quantity = req.body.quantity;
-    let photo = req.body.photo;
+    
+   // let photo = req.body.photo;
 
     console.log("Register")
-    console.log(req.body)
+    console.log(req.body.username)
     console.log("Register")
    // bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query(
             "INSERT INTO shop (username, itemname,category,description,price,quantity,photo) VALUES (?,?,?,?,?,?,?)",
-            [username,name,category,description,price,quantity,photo],
+            [username,name,category,description,price,quantity,req.file.originalname],
             (err, result) => {
                 console.log("result");
                 console.log(result);

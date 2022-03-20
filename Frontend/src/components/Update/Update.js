@@ -4,6 +4,7 @@ import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import au from '../img/ua.jpg'
+import { useState , useEffect} from "react";
 
 class Create extends Component{
     constructor(props){
@@ -20,7 +21,8 @@ class Create extends Component{
             city : "",
             country : "",
             user: cookie.load('cookie'),
-            password:""
+          
+            photo:""
         }
         //Bind the handlers to this class
         this.namehandler = this.namehandler.bind(this);
@@ -31,12 +33,55 @@ class Create extends Component{
         this.phonehandler = this.phonehandler.bind(this);
         this.cityhandler = this.cityhandler.bind(this);
         this.countryhandler = this.countryhandler.bind(this);
-        this.passwordhandler = this.passwordhandler.bind(this);
+
         this.userhandler = this.userhandler.bind(this);
-        
+        this.imageHandler = this.imageHandler.bind(this);
         this.submitLogin = this.submitLogin.bind(this);
     }
 
+    imageHandler= (event)=>{
+        this.setState({
+            photo : event.target.files[0]
+        })
+
+    }
+
+    /*
+     imageHandler= (event)=>{
+        const file= event.target.files[0];
+        const data = cookie.load('cookie')// {  username:"adfafsd"}// cookie.load('cookie')}
+ 
+        const formData = new FormData()
+        formData.append('image',file)
+        formData.append('username',data)
+        console.log("File");
+        console.log(formData);
+        console.log("File");
+        axios.post('http://localhost:3001/api/image', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+        })
+
+        
+        fetch('http://localhost:3001/api/image',{
+            method:'POST',
+            body:formData,
+            headers:{
+                'Accept':'multipart/form-data',
+            }
+           // credentials:'include',
+        })
+        .then(res=>res.json())
+        .then(res=>{
+            console.log(res);
+            //setUploadStatus(res.msg);
+        })
+        .catch(error=>{
+            console.error(error);
+        })
+
+    }*/
     //title change handler
     namehandler = (e) => {
         this.setState({
@@ -49,12 +94,8 @@ class Create extends Component{
                 user : e.target.value
             })
         }
-            //title change handler
-    passwordhandler = (e) => {
-        this.setState({
-            password : e.target.value
-        })
-    }
+
+
         //title change handler
         agehandler = (e) => {
             this.setState({
@@ -97,6 +138,7 @@ class Create extends Component{
  
 
 
+
     componentDidMount(){
         const data={
             username: cookie.load('cookie'),
@@ -116,7 +158,7 @@ class Create extends Component{
                     city :  this.state.city.concat(response.data.City),
                     country : this.state.country.concat(response.data.Country),
                     user: cookie.load('cookie'),
-                    //books : this.state.books.concat(response.data) 
+                    photo : 'http://localhost:3001/uploads/'+this.state.photo.concat(response.data.photo),
                 });
             });
     } 
@@ -125,20 +167,32 @@ class Create extends Component{
     submitLogin = (e) => {
 
         e.preventDefault();
-        const data = {
-            street : this.state.street,
-            name : this.state.name,
-            age : this.state.age,
-            email : this.state.email,
-            phone : this.state.phone,
-            city : this.state.city,
-            country : this.state.country,
-            zip : this.state.zip,
-            user:this.state.user,
-            password:this.state.password
-        }
+        
+        const file= this.state.photo;
+       // const data = cookie.load('cookie')// {  username:"adfafsd"}// cookie.load('cookie')}
+ 
+        const formData = new FormData()
+        formData.append('image',file)
+        formData.append('street',this.state.street )
+        formData.append('name', this.state.name)
+        formData.append('age', this.state.age)
+        formData.append('email', this.state.email)
+        formData.append('phone', this.state.phone)
+        formData.append('city', this.state.city)
+        formData.append('country', this.state.country)
+        formData.append('zip', this.state.zip)
+        formData.append('user',cookie.load('cookie'))
+
+        console.log("File");
+        
+        console.log("File");
+
         //send data to backend
-        axios.post('http://localhost:3001/register',data)
+        axios.post('http://localhost:3001/updateuser',formData,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+        })
             .then(response => {
                 console.log("Status Code Register : ",response.status);
                 if(response.status === 200){
@@ -155,9 +209,16 @@ class Create extends Component{
             }); 
     }
     render(){
+
+        let {photo} = this.state;
+        let setImage = '';
+        console.log("foto");
+        console.log(photo);
+        console.log("foto");
         //set values 
         let {successflag} = this.state;
         let success = null;
+       // let [uploadStatus, setUploadStatus] = useState('');
         let loginredirect = null;         
         let repeteatedid;
         let {duplicateid} = this.state;
@@ -190,10 +251,11 @@ class Create extends Component{
                         <div style={{width: '100%'}} class="form-group">
 
                         <div class="text-center">
-  <img src={au} class="rounded" ></img>
+                        {photo && <img src={photo} alt="img"/>}  <img src={au} class="rounded" ></img>
   <br></br>
   <label class="form-label" for="customFile">Change Profile picture</label>
-<input type="file" class="form-control" id="customFile" />
+
+  <input type="file" name="image" accept="image/*" multiple={false} onChange={this.imageHandler} />
 </div>
 <br></br>
                         <div class="col col-lg-3">
