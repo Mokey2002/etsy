@@ -3,27 +3,100 @@ import '../../App.css';
 import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
+import Navbar from '../LandingPage/Navbar';
+//import Button from 'react-bootstrap/Button'; 
+import {Link} from 'react-router-dom';
 
 class Home extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {  
-          items:[]
-          //  books : []
+            products : [],
+            term: "",
+            minPrice: 0.00,
+            maxPrice: 0.00,
+            selectedOption: "price",
+            outOfStock: false,
+            authFlag: true,
         }
+        this.termChangeHandler = this.termChangeHandler.bind(this);
+        this.minPriceChangeHandler = this.minPriceChangeHandler.bind(this);
+        this.maxPriceChangeHandler = this.maxPriceChangeHandler.bind(this);
+        this.selectedOptionChangeHandler = this.selectedOptionChangeHandler.bind(this);
+        this.outOfStockOptionChangeHandler = this.outOfStockOptionChangeHandler.bind(this);
+        this.submitLogin = this.submitLogin.bind(this);
+        //this.handleClickFavorites = this.handleClickFavorites(this);
+
     }  
 
-    /*
-    //get the books data from backend  
-    componentDidMount(){
-        axios.get('http://localhost:3001/home')
+
+    //
+    handleClickFavorites (e){
+        //e.stopPropagation();
+        // access to e.target here
+        console.log(e.target.value);
+
+        const data={
+            username: cookie.load('cookie'),
+            itemname:e.target.value
+        }
+        axios.post('http://localhost:3001/addfavorites',data)
                 .then((response) => {
+
+
+                    if(response.status === 200){
+                        console.log("passed favorites")
+                    } else if(response.status === 201){
+                        console.log("INVALID DATA  favorites")
+                    }
+
                 //update the state with the response data
-                this.setState({
-                    books : this.state.books.concat(response.data) 
-                });
+              //  this.setState({
+              //      books : this.state.books.concat(response.data) 
+               // });
             });
-    }*/
+
+
+    }
+
+    
+   //Call the Will Mount to set the auth Flag to false
+   componentWillMount(){
+    this.setState({
+        authFlag : true,
+        products: [],
+    })
+}
+    //username change handler to update state variable with the text entered by the user
+    termChangeHandler= (e) => {
+        this.setState({
+            term : e.target.value
+        })
+    }
+    //username change handler to update state variable with the text entered by the user
+    minPriceChangeHandler= (e) => {
+        this.setState({
+            minPrice : e.target.value
+        })
+    }
+    //username change handler to update state variable with the text entered by the user
+    maxPriceChangeHandler= (e) => {
+        this.setState({
+            maxPrice : e.target.value
+        })
+    }
+    selectedOptionChangeHandler=(e)=>{
+        this.setState({
+            selectedOption:e.target.value
+        })
+    }
+    outOfStockOptionChangeHandler=(e)=>{
+        this.setState({
+            outOfStock:true
+        })
+    }
+
+
     componentDidMount(){
         const data={
             username: cookie.load('cookie'),
@@ -36,12 +109,12 @@ class Home extends Component {
                     if(response.status === 200){
                         this.setState({
                             
-                            items : this.state.items.concat(response.data) 
+                            products : this.state.products.concat(response.data) 
                         })
                     } else if(response.status === 201){
                         this.setState({
                             
-                            items : this.state.items.concat(response.data)  
+                            products : this.state.products.concat(response.data)  
                         })
                     }
 
@@ -51,17 +124,54 @@ class Home extends Component {
                // });
             });
     }
-
+    //submit Login handler to send a request to the node backend
+    submitLogin = (e) => {
+    //var headers = new Headers();
+    //prevent page from refresh
+    e.preventDefault();
+    const data = {
+        term : this.state.term,
+        minPrice: this.state.minPrice,
+        maxPrice: this.state.maxPrice,
+        selectedOption: this.state.selectedOption,
+    }
+    //set the with credentials to true
+    axios.defaults.withCredentials = true;
+    //make a post request with the user data
+    axios.post('http://localhost:3001/getallshop',data)
+        .then(res => {
+            if(res){
+                console.log(res)
+                this.setState({
+                    authFlag : false,
+                    products : (res.data)
+                })
+               
+            }else{
+                this.setState({
+                    authFlag : true,
+                    
+                })
+            }
+        });  
+}
     render(){
         //iterate over books to create a table row
-        let details = this.state.items.map(item => {
+        let details = this.state.products.map(product => {
             return(
                 <tr>
-                 <td>{item.itemname}   <div class="left">
-              <button  onClick = {this.submitLogin}  type="button" class="btn btn-primary">Like</button>
-            </div></td>
-                <td>{item.price}</td>
-
+                    <td> <figure> {'http://localhost:3001/uploads/'+product.photo && <img src={'http://localhost:3001/uploads/'+product.photo} name={product.itemname} alt="img"/>} <figcaption>{product.itemname} </figcaption></figure></td>
+                    <td>{product.price}</td>
+                    <td>{product.description}</td>
+                    <td>
+                    <div style={{width: '10%'}}>
+                        <button value={product.itemname} onClick={this.handleClickFavorites} class="btn btn-success" type="submit">Favorite</button>
+                    </div>
+                    <div style={{width: '10%'}}>
+                    <button onClick = {this.submitLogin} class="btn btn-success" type="submit">View</button>
+                    </div>
+                    </td>
+               
                 </tr>
             )
         })
@@ -74,13 +184,56 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-                    <h2>Items</h2>
-                        <table class="table">
+                    <h2>Welcome to home Page</h2>
+                    <br/>
+                        <div style={{width: '30%'}} class="form-group">
+                                <input onChange = {this.termChangeHandler} type="text" class="form-control" name="term" placeholder="Search..."/>
+                        </div>
+                        <div style={{width: '30%'}}>
+                            <button onClick = {this.submitLogin} class="btn btn-success" type="submit">Search</button>
+                        </div> 
+                        <br/>
+                        <p>Filter by Price Range</p>
+                        <div style={{width: '15%'}} class="form-group">
+                                <input onChange = {this.minPriceChangeHandler} type="number" class="form-control" name="minPrice" placeholder="Min"/>
+                                <input onChange = {this.maxPriceChangeHandler} type="number" class="form-control" name="maxPrice" placeholder="Max"/>
+                        </div>
+                        <p>Sort Products By: </p>
+                        <div class="form-check">
+                                <label>
+                                    <input type= "radio" name="sortType" value="price" checked={this.state.selectedOption ==="price"}  onChange = {this.selectedOptionChangeHandler} class="form-check-input" />
+                                    Price
+                                </label> 
+                        </div>
+                        <div class="form-check">
+                                <label>
+                                    <input type= "radio" name="sortType" value="quantity" checked={this.state.selectedOption ==="quantity"}  onChange = {this.selectedOptionChangeHandler} class="form-check-input" />
+                                    Quantity
+                                </label> 
+                        </div>
+                        <div class="form-check">
+                                <label>
+                                    <input type= "radio" name="sortType" value="salesCount" checked={this.state.selectedOption ==="salesCount"}  onChange = {this.selectedOptionChangeHandler} class="form-check-input" />
+                                    Sales Count
+                                </label> 
+                        </div>
+                        <div class="form-check">
+                                <label>
+                                    <input type= "checkbox" name="outOfStock" checked={this.state.outOfStock}  onChange = {this.outOfStockOptionChangeHandler} class="form-check-input" />
+                                    Show Out of Stock Items
+                                </label> 
+                        </div>
+                        
+                        <br/>
+                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Item</th>
+                                    <th>Name</th>
                                     <th>Price</th>
-                                   
+                                    <th>Description</th>
+                             
+                                    <th>Actions</th>
+    
                                 </tr>
                             </thead>
                             <tbody>

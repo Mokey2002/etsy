@@ -11,28 +11,39 @@ class Home extends Component {
     constructor(){
         super();
         this.state = {  
-            books : []
+            items : []
         }
     }  
     //get the books data from backend  
     componentDidMount(){
-        axios.get('http://localhost:3001/home')
+        const data={
+            username: cookie.load('cookie')
+        }
+        axios.post('http://localhost:3001/getfavorites',data)
                 .then((response) => {
+
+
+                    if(response.status === 200){
+                        console.log("passed favorites")
+                    } else if(response.status === 201){
+                        console.log("INVALID DATA  favorites")
+                    }
+
                 //update the state with the response data
-                this.setState({
-                    books : this.state.books.concat(response.data) 
-                });
+              //  this.setState({
+              //      books : this.state.books.concat(response.data) 
+               // });
             });
     }
 
     render(){
         //iterate over books to create a table row
-        let details = this.state.books.map(book => {
+        let details = this.state.items.map(item => {
             return(
                 <tr>
-                    <td>{book.BookID}</td>
-                    <td>{book.Title}</td>
-                    <td>{book.Author}</td>
+                 <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
+                    <td>{item.price}</td>
+                    <td>{item.description}</td>
                 </tr>
             )
         })
@@ -82,7 +93,7 @@ class Home extends Component {
                             </thead>
                             <tbody>
                                 {/*Display the Tbale row based on data recieved*/}
-                                {/*details*/}
+                                {details}
                                 <div class="outer">
                 <img src={au} class="rounded" ></img>
     <div class="inner">

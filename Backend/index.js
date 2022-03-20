@@ -410,6 +410,7 @@ app.post('/check', function (req, res) {
 
 //get all items for landing
 app.post('/getallshop', function (req, res) {
+    console.log("get all for landing")
     db.query(
         "SELECT * From shop ",
         [],
@@ -516,6 +517,84 @@ app.post('/register', (req,res) => {
                     'Content-Type' : 'text/plain'
                 })
                 res.end("Unsuccessful Login");
+            }
+            }
+        );
+   // })
+    
+});
+//insert favorites
+app.post('/addfavorites', (req,res) => {
+    let username = req.body.username;
+    let itemname = req.body.itemname;
+    console.log("addfavorites")
+    console.log(req.body)
+    console.log("addfavorites")
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+            "INSERT INTO favorites (username,itemname) VALUES (?,?)",
+            [username,itemname],
+            (err, result) => {
+                console.log("result");
+                console.log(result);
+                console.log(err);
+                console.log("result");
+
+            if(err) {
+                res.send({err: err})
+            }
+            if (result){
+                //return succes to front end
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful Insert");
+            }
+            else{
+                //return unsuccesful to front end
+                res.writeHead(201,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Unsuccessful Insert");
+            }
+            }
+        );
+   // })
+    
+});
+//get favorites
+app.post('/getfavorites', (req,res) => {
+    let username = req.body.username;
+    let itemname = req.body.itemname;
+    console.log("get favorites")
+    console.log(req.body)
+    console.log("get favorites")
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+            "SELECT * FROM favorites where suername =?",
+            [username],
+            (err, result) => {
+                console.log("result");
+                console.log(result);
+                //console.log(err);
+                console.log("result");
+
+            if(err) {
+                res.send({err: err})
+            }
+            if (result){
+                //return succes to front end
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful Insert");
+            }
+            else{
+                //return unsuccesful to front end
+                res.writeHead(201,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Unsuccessful Insert");
             }
             }
         );
