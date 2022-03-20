@@ -24,6 +24,9 @@ class Home extends Component {
 
 
                     if(response.status === 200){
+                        this.setState({
+                    items : this.state.items.concat(response.data) 
+                });
                         console.log("passed favorites")
                     } else if(response.status === 201){
                         console.log("INVALID DATA  favorites")

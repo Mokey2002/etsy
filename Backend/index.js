@@ -571,11 +571,12 @@ app.post('/getfavorites', (req,res) => {
     console.log("get favorites")
    // bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query(
-            "SELECT * FROM favorites where suername =?",
+            "SELECT * FROM favorites where username =?",
             [username],
             (err, result) => {
                 console.log("result");
                 console.log(result);
+                
                 //console.log(err);
                 console.log("result");
 
@@ -583,11 +584,55 @@ app.post('/getfavorites', (req,res) => {
                 res.send({err: err})
             }
             if (result){
-                //return succes to front end
-                res.writeHead(200,{
-                    'Content-Type' : 'text/plain'
-                })
-                res.end("Successful Insert");
+                //
+                console.log("get item")
+                const items = result.filter(resulitem => resulitem.itemname !== null);
+console.log(items); // true
+let itemnames=[]
+for (var j = 0; j < items.length; j++){
+    itemnames.push(items[j].itemname);
+    console.log(items[j].itemname);
+  }
+  console.log(itemnames)
+  let name = itemnames.toString();
+  var str = "SELECT * FROM shop WHERE ";
+
+if (name.includes(",")) {  
+  var names = name.split(",");
+  names.map((o,i)=>{
+    names[i] = '%'+o+'%'; 
+    str += "itemname LIKE ? ";
+   (i==names.length -1)?str += "":str += "OR ";
+
+  }) 
+} else{
+  str += "itemname LIKE ? ";
+}
+  console.log(name)
+  console.log(str)
+  console.log("get item")
+  db.query(
+    str,
+
+    names,
+    (err, result) => {
+        console.log("11favorites result")
+        console.log(result)
+        console.log(err)
+        console.log("11favorites result")
+    if (result){
+        console.log("favorites result")
+        console.log(result)
+        console.log("favorites result")
+                        //return succes to front end
+                        res.writeHead(200,{
+                            'Content-Type' : 'text/plain'
+                        })
+                        res.end(JSON.stringify(result));
+    
+    }
+    }
+);
             }
             else{
                 //return unsuccesful to front end
