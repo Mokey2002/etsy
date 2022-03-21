@@ -14,14 +14,29 @@ class Home extends Component {
             books : []
         }
     }  
+  
     //get the books data from backend  
     componentDidMount(){
-        axios.get('http://localhost:3001/home')
+        const data={
+            username: cookie.load('cookie')
+        }
+        axios.post('http://localhost:3001/getfavorites',data)
                 .then((response) => {
-                //update the state with the response data
-                this.setState({
-                    books : this.state.books.concat(response.data) 
+
+
+                    if(response.status === 200){
+                        this.setState({
+                    items : this.state.items.concat(response.data) 
                 });
+                        console.log("passed favorites")
+                    } else if(response.status === 201){
+                        console.log("INVALID DATA  favorites")
+                    }
+
+                //update the state with the response data
+              //  this.setState({
+              //      books : this.state.books.concat(response.data) 
+               // });
             });
     }
 

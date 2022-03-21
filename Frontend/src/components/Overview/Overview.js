@@ -43,6 +43,19 @@ class Home extends Component {
 
     }
 
+    handleshopclick (e){
+        //e.stopPropagation();
+        // access to e.target here
+        console.log("OVERVIEW");
+        console.log(e.target.value);
+        console.log("OVERVIEW");
+
+        let d = new Date();
+        d.setTime(d.getTime() + (25*60*1000));
+        document.cookie = "shopname" +'='+ e.target.value +'; Path=/;';
+        window.location.href='/shop'
+       // cookie.set("shopname", e.target.value, {path: "/", expires: d});
+    }
     handleAddCart (e){
         //e.stopPropagation();
         // access to e.target here
@@ -115,6 +128,9 @@ class Home extends Component {
                     </div>
                     <div style={{width: '10%'}}>
                     <button value={item.itemname} onClick = {this.handleAddCart} class="btn btn-success" type="submit">Add to cart</button>
+                    </div>
+                    <div style={{width: '10%'}}>
+                    <button value={item.shopname} onClick = {this.handleshopclick} class="btn btn-success" type="submit">Visit Shop</button>
                     </div>
                     </td>
                 </tr>

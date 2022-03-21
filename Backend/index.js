@@ -462,9 +462,9 @@ app.post('/shopdata', function (req, res) {
     console.log(req.body)
     console.log(req.body.shopname)
     console.log("shopdata")
-    if(req.body.shopname ==undefined){
+    if(req.body.shopname ==undefined || req.body.shopname=='' ){
     db.query(
-        "SELECT * From shop  where username =? ",
+        "SELECT * From shop  where username =?",
         [req.body.username],
         (err, result) => {
             console.log("shoopdata");
@@ -492,8 +492,8 @@ app.post('/shopdata', function (req, res) {
     else{
         console.log("here")
         db.query(
-            "SELECT * From shop  where shopname =? ",
-            [req.body.shopname],
+            "SELECT * From shop  where shopname =? and username=?",
+            [req.body.shopname,req.body.username],
             (err, result) => {
                 console.log("shoopdata");
                 console.log(result);
@@ -508,10 +508,44 @@ app.post('/shopdata', function (req, res) {
                 console.log("******");
                 console.log(result);
                 console.log("******");
-                res.writeHead(201,{
+                res.writeHead(200,{
                     'Content-Type' : 'text/plain'
                 })
                 res.end(JSON.stringify(result));
+            }
+            else{
+                db.query(
+                    "SELECT * From shop  where shopname =?",
+                    [req.body.shopname,req.body.username],
+                    (err, result) => {
+                        console.log("shoopdata");
+                        console.log(result);
+                        console.log(err);
+                        console.log("shoopdata");
+                    if(err) {
+                        res.send({err: err})
+                    }
+                    if (result.length > 0 ){
+                       // {user}JSON.stringify(books)
+                        //return succes to front end
+                        console.log("******");
+                        console.log(result);
+                        console.log("******");
+                        res.writeHead(201,{
+                            'Content-Type' : 'text/plain'
+                        })
+                        res.end(JSON.stringify(result));
+                    }
+                    else{
+        
+        
+        
+                        
+                    }
+                    }
+            
+                );
+
             }
             }
     
@@ -607,13 +641,102 @@ app.post('/addfavorites', (req,res) => {
    // })
     
 });
+//get items from cart
+app.post('/getcartitems', (req,res) => {
+    let username = req.body.username;
+    let itemname = req.body.itemname;
+    console.log("get favorites")
+    console.log(req.body)
+    console.log("get favorites")
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+            "SELECT * FROM cart where username =?",
+            [username],
+            (err, result) => {
+                console.log("result");
+                console.log(result);
+                
+                //console.log(err);
+                console.log("result");
+
+            if(err) {
+                res.send({err: err})
+            }
+            if (result){
+                //
+                console.log("get cart item")
+                const items = result.filter(resulitem => resulitem.itemname !== null);
+console.log(items); // true
+let itemnames=[]
+for (var j = 0; j < items.length; j++){
+    itemnames.push(items[j].itemname);
+    console.log(items[j].itemname);
+  }
+  console.log(itemnames)
+  let name = itemnames.toString();
+  var str = "SELECT * FROM shop WHERE ";
+
+if (name.includes(",")) {  
+  var names = name.split(",");
+  names.map((o,i)=>{
+    names[i] = '%'+o+'%'; 
+    str += "itemname LIKE ? ";
+   (i==names.length -1)?str += "":str += "OR ";
+
+  }) 
+} else{
+  names=name;
+  str += "itemname LIKE ? ";
+}
+  console.log(name)
+  console.log(str)
+  console.log("get cart item")
+  db.query(
+    str,
+
+    names,
+    (err, result) => {
+        console.log("11favorites result")
+        console.log(result)
+        console.log(err)
+        console.log("11favorites result")
+    if (result){
+        console.log("favorites result")
+        console.log(result)
+        console.log("favorites result")
+                        //return succes to front end
+                        res.writeHead(200,{
+                            'Content-Type' : 'text/plain'
+                        })
+                        res.end(JSON.stringify(result));
+    
+    }
+    }
+);
+            }
+            else{
+                //return unsuccesful to front end
+                res.writeHead(201,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Unsuccessful Insert");
+            }
+            }
+        );
+   // })
+    
+});
+
+
+
+
 //insert cart
 app.post('/addcart', (req,res) => {
     let username = req.body.username;
     let itemname = req.body.itemname;
-    console.log("addfavorites")
+    console.log("addcart")
     console.log(req.body)
-    console.log("addfavorites")
+    console.log("addcart")
    // bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query(
             "INSERT INTO cart (username,itemname) VALUES (?,?)",
@@ -793,16 +916,31 @@ app.post('/additem', upload.single("image"),(req,res) => {
     let description = req.body.description;
     let price = req.body.price;
     let quantity = req.body.quantity;
-    
+    let shopname=''
    // let photo = req.body.photo;
 
-    console.log("Register")
-    console.log(req.body.username)
-    console.log("Register")
-   // bcrypt.hash(password, saltRounds, (err, hash) => {
+   db.query(
+    "SELECT shopname FROM shop where username=?",
+    [username],
+    (err, result) => {
+        console.log("result to fins shopname");
+        console.log(result);
+        console.log(err);
+        console.log("result to find shopname");
+
+    if(err) {
+        res.send({err: err})
+    }
+    if (result){
+        console.log("Register ITEM")
+        console.log(shopname)
+       
+        shopname = result[0].shopname
+        console.log(shopname)
+        console.log("Register ITEM")
         db.query(
-            "INSERT INTO shop (username, itemname,category,description,price,quantity,photo) VALUES (?,?,?,?,?,?,?)",
-            [username,name,category,description,price,quantity,req.file.originalname],
+            "INSERT INTO shop (username,shopname, itemname,category,description,price,quantity,photo) VALUES (?,?,?,?,?,?,?,?)",
+            [username,shopname,name,category,description,price,quantity,req.file.originalname],
             (err, result) => {
                 console.log("result");
                 console.log(result);
@@ -828,6 +966,15 @@ app.post('/additem', upload.single("image"),(req,res) => {
             }
             }
         );
+    }
+    else{
+    }
+    }
+);
+
+
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+
    // })
     
 });
