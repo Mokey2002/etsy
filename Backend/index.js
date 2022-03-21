@@ -645,9 +645,9 @@ app.post('/addfavorites', (req,res) => {
 app.post('/getcartitems', (req,res) => {
     let username = req.body.username;
     let itemname = req.body.itemname;
-    console.log("get favorites")
+    console.log("get cartitems")
     console.log(req.body)
-    console.log("get favorites")
+    console.log("get cartitems")
    // bcrypt.hash(password, saltRounds, (err, hash) => {
         db.query(
             "SELECT * FROM cart where username =?",

@@ -23,7 +23,7 @@ class Home extends Component {
 
         //let d = new Date();
         //d.setTime(d.getTime() + (25*60*1000));
-       // document.cookie = "itemname" +'='+ e.target.value +'; Path=/;';
+      // document.cookie = "itemname" +'='+ e.target.value +'; Path=/;';
         window.location.href='/Purchases'
        // cookie.set("shopname", e.target.value, {path: "/", expires: d});
     }
@@ -31,9 +31,10 @@ class Home extends Component {
     //get the books data from backend  
     componentDidMount(){
         const data={
-            username: cookie.load('cookie')
+            username: cookie.load('cookie'),
+            shopname: cookie.load('shopname')
         }
-        axios.post('http://localhost:3001/getfavorites',data)
+        axios.post('http://localhost:3001/getcartitems',data)
                 .then((response) => {
 
 

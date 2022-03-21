@@ -89,7 +89,7 @@ class Login extends Component{
                 <div class="login-form">
                     <div class="main-div">
                         <div class="panel">
-                            <h2>Admin Login</h2>
+                            <h2>User Login</h2>
                             <p>Please enter your username and password</p>
                         </div>
                         

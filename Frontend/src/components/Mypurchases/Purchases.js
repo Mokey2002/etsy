@@ -11,16 +11,16 @@ class Home extends Component {
     constructor(){
         super();
         this.state = {  
-            books : []
+            items : []
         }
     }  
-  
+    //get the books data from backend  
     //get the books data from backend  
     componentDidMount(){
         const data={
             username: cookie.load('cookie')
         }
-        axios.post('http://localhost:3001/getfavorites',data)
+        axios.post('http://localhost:3001/getcartitems',data)
                 .then((response) => {
 
 
@@ -42,12 +42,15 @@ class Home extends Component {
 
     render(){
         //iterate over books to create a table row
-        let details = this.state.books.map(book => {
+        let details = this.state.items.map(item => {
             return(
                 <tr>
-                    <td>{book.BookID}</td>
-                    <td>{book.Title}</td>
-                    <td>{book.Author}</td>
+                     <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
+                
+                    <td>{item.price}</td>
+                    <td>{item.quantity}</td>
+                    <td>{item.shopname}</td>
+                
                 </tr>
             )
         })
@@ -60,60 +63,22 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-
-                <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
-
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
-
-
                     <h2>Items</h2>
-
-<div class="d-inline ">
-  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  <button type="button" class="btn btn-primary">
-  <FontAwesomeIcon icon={faSearch} />
-  </button>
-</div>
-<form class="form-inline">
-  <div class="form-group ">
-    <label for="inputPassword2" class="sr-only">Password</label>
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  </div>
-  <button type="submit" class="btn btn-primary mb-2">Search</button>
-</form>
-
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Book ID</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Quantity </th>
+                                    <th>Shopname </th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
                                 {/*Display the Tbale row based on data recieved*/}
-                                {/*details*/}
-                                <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
+                                {details}
+   
 
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
-  <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
-
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
                             </tbody>
                         </table>
                 </div> 
