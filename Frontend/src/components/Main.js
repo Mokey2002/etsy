@@ -13,6 +13,7 @@ import Shop from './Shop/Shop';
 import Purchases from './Mypurchases/Purchases';
 import Cart from './Cart/Cart';
 
+
 //Create a Main Component
 class Main extends Component {
     render(){

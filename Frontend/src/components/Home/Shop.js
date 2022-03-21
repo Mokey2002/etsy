@@ -7,9 +7,8 @@ import au from '../img/ua.jpg';
 import {Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-//import Home from '../Home/Home';
-//import { useNavigationParam } from 'react-navigation';
-
+//import Home from '../Home'
+import Home from './Home'
 class Create extends Component {
     constructor(props){
         super(props);
@@ -22,7 +21,7 @@ class Create extends Component {
             description : "",
             price: "",
             quantity : "",
-            photo : ""
+            photo : "",
             
         }
 
@@ -135,17 +134,12 @@ class Create extends Component {
     componentDidMount(){
         const data={
             username: cookie.load('cookie'),
-            shopname:cookie.load('shopname')
+
         }
 
         console.log("shop");
-       
-        console.log(cookie.load('cookie'));
-        console.log(cookie.load('shopname'));
+        console.log(this.state.owner);
         console.log("shop");
-        if(cookie.load('shopname')!==null){
-        document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        }
         axios.post('http://localhost:3001/shopdata',data)
                 .then((response) => {
 
@@ -310,7 +304,8 @@ class Create extends Component {
   {sales}
   <button type="submit" class="btn btn-primary mb-2">Search</button>
 </form>
-
+{this.state}
+{this.state.owner}
                         <table class="table">
                             <thead>
                                 <tr>

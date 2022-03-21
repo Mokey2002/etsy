@@ -6,7 +6,9 @@ import {Redirect} from 'react-router';
 import Navbar from '../LandingPage/Navbar';
 //import Button from 'react-bootstrap/Button'; 
 import {Link} from 'react-router-dom';
-
+import Shop from '../Shop/Shop';
+//import { useNavigation } from 'react-navigation';
+//import { useNavigation } from '@react-navigation/native';
 class Home extends Component {
     constructor(props){
         super(props);
@@ -18,8 +20,10 @@ class Home extends Component {
             selectedOption: "price",
             outOfStock: false,
             authFlag: true,
+            shopname:""
         }
         this.termChangeHandler = this.termChangeHandler.bind(this);
+      //  this.handleshopclick = this.handleshopclick.bind(this);
         this.minPriceChangeHandler = this.minPriceChangeHandler.bind(this);
         this.maxPriceChangeHandler = this.maxPriceChangeHandler.bind(this);
         this.selectedOptionChangeHandler = this.selectedOptionChangeHandler.bind(this);
@@ -57,6 +61,22 @@ class Home extends Component {
             });
 
 
+    }
+
+    
+    handleshopclick (e){
+        //e.stopPropagation();
+        // access to e.target here
+        console.log(e.target.value);
+
+  
+        var dataFromParent = {shopnombre:e.target.value}
+
+        let d = new Date();
+        d.setTime(d.getTime() + (25*60*1000));
+        document.cookie = "shopname" +'='+ e.target.value +'; Path=/;';
+        window.location.href='/shop'
+       // cookie.set("shopname", e.target.value, {path: "/", expires: d});
     }
 
     
@@ -155,7 +175,10 @@ class Home extends Component {
             }
         });  
 }
+
+
     render(){
+       // const navigation = useNavigation();
         //iterate over books to create a table row
         let details = this.state.products.map(product => {
             return(
@@ -163,6 +186,11 @@ class Home extends Component {
                     <td> <figure> {'http://localhost:3001/uploads/'+product.photo && <img src={'http://localhost:3001/uploads/'+product.photo} name={product.itemname} alt="img"/>} <figcaption>{product.itemname} </figcaption></figure></td>
                     <td>{product.price}</td>
                     <td>{product.description}</td>
+                    <td>
+   
+                    <Link to="/shop" Shop dataFromParent = {product.shopname}  className="btn btn-primary">{product.shopname}</Link>
+                    <button value={product.shopname} onClick={this.handleshopclick} class="btn btn-success" type="submit">{product.shopname}</button>
+                    </td>
                     <td>
                     <div style={{width: '10%'}}>
                         <button value={product.itemname} onClick={this.handleClickFavorites} class="btn btn-success" type="submit">Favorite</button>
@@ -231,7 +259,7 @@ class Home extends Component {
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Description</th>
-                             
+                                    <th>Shop</th>
                                     <th>Actions</th>
     
                                 </tr>
