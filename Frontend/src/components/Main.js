@@ -12,6 +12,7 @@ import SRegister from './SRegister/SRegister';
 import Shop from './Shop/Shop';
 import Purchases from './Mypurchases/Purchases';
 import Cart from './Cart/Cart';
+import Overview from './Overview/Overview';
 
 
 //Create a Main Component
@@ -32,6 +33,7 @@ class Main extends Component {
                 <Route path="/shop" component={Shop}/>
                 <Route path="/purchases" component={Purchases}/>
                 <Route path="/cart" component={Cart}/>
+                <Route path="/overview" component={Overview}/>
             </div>
         )
     }

@@ -14,22 +14,83 @@ class Home extends Component {
             items : []
         }
     }  
-    //get the books data from backend  
-    componentDidMount(){
+
+    handleClickFavorites (e){
+        //e.stopPropagation();
+        // access to e.target here
+        console.log(e.target.value);
+
         const data={
-            username: cookie.load('cookie')
+            username: cookie.load('cookie'),
+            itemname:e.target.value
         }
-        axios.post('http://localhost:3001/getfavorites',data)
+        axios.post('http://localhost:3001/addfavorites',data)
                 .then((response) => {
 
 
                     if(response.status === 200){
+                        console.log("passed favorites")
+                    } else if(response.status === 201){
+                        console.log("INVALID DATA  favorites")
+                    }
+
+                //update the state with the response data
+              //  this.setState({
+              //      books : this.state.books.concat(response.data) 
+               // });
+            });
+
+
+    }
+
+    handleAddCart (e){
+        //e.stopPropagation();
+        // access to e.target here
+        console.log(e.target.value);
+
+        const data={
+            username: cookie.load('cookie'),
+            itemname:e.target.value
+        }
+        axios.post('http://localhost:3001/addcart',data)
+                .then((response) => {
+
+
+                    if(response.status === 200){
+                        console.log("passed favorites")
+                    } else if(response.status === 201){
+                        console.log("INVALID DATA  favorites")
+                    }
+
+                //update the state with the response data
+              //  this.setState({
+              //      books : this.state.books.concat(response.data) 
+               // });
+            });
+
+
+    }
+    //get the books data from backend  
+    componentDidMount(){
+        const data={
+            username: cookie.load('cookie'),
+            itemname: cookie.load('itemname')
+        }
+
+        console.log("Overview");
+       
+        console.log(cookie.load('cookie'));
+        console.log(cookie.load('itemname'));
+        console.log("Overview");
+        axios.post('http://localhost:3001/getitem',data)
+                .then((response) => {
+
+
+                    if(response.status === 201){
                         this.setState({
                     items : this.state.items.concat(response.data) 
                 });
                         console.log("passed favorites")
-                    } else if(response.status === 201){
-                        console.log("INVALID DATA  favorites")
                     }
 
                 //update the state with the response data
@@ -45,8 +106,17 @@ class Home extends Component {
             return(
                 <tr>
                  <td> <figure> {'http://localhost:3001/uploads/'+item.photo && <img src={'http://localhost:3001/uploads/'+item.photo} name={item.itemname} alt="img"/>} <figcaption>{item.itemname} </figcaption></figure></td>
+                     <td>{item.quantity}</td>
                     <td>{item.price}</td>
                     <td>{item.description}</td>
+                    <td>
+                    <div style={{width: '10%'}}>
+                        <button value={item.itemname} onClick={this.handleClickFavorites} class="btn btn-success" type="submit">Favorite</button>
+                    </div>
+                    <div style={{width: '10%'}}>
+                    <button value={item.itemname} onClick = {this.handleAddCart} class="btn btn-success" type="submit">Add to cart</button>
+                    </div>
+                    </td>
                 </tr>
             )
         })
@@ -59,39 +129,16 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-
-                <div class="outer">
-                <img src={au} class="rounded" ></img>
-    <div class="inner">
-
-    <Link to="/update"><span class="glyphicon glyphicon-user"></span>Edit Profile</Link>
-    <label></label>
-    </div>
-  </div>
-
-
-                    <h2>Favorite Items</h2>
-
-<div class="d-inline ">
-  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  <button type="button" class="btn btn-primary">
-  <FontAwesomeIcon icon={faSearch} />
-  </button>
-</div>
-<form class="form-inline">
-  <div class="form-group ">
-    <label for="inputPassword2" class="sr-only">Password</label>
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  </div>
-  <button type="submit" class="btn btn-primary mb-2">Search</button>
-</form>
+                    <h2>Overview Item</h2>
 
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Book ID</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
+                                    <th>Item Name</th>
+                                    <th>Sales Count</th>
+                                    <th>Price</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>

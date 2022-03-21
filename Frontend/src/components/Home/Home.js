@@ -69,8 +69,6 @@ class Home extends Component {
         // access to e.target here
         console.log(e.target.value);
 
-  
-        var dataFromParent = {shopnombre:e.target.value}
 
         let d = new Date();
         d.setTime(d.getTime() + (25*60*1000));
@@ -78,7 +76,20 @@ class Home extends Component {
         window.location.href='/shop'
        // cookie.set("shopname", e.target.value, {path: "/", expires: d});
     }
+    handleOverviewClick (e){
+        //e.stopPropagation();
+        // access to e.target here
+        console.log(e.target.value);
 
+  
+
+
+        let d = new Date();
+        d.setTime(d.getTime() + (25*60*1000));
+        document.cookie = "itemname" +'='+ e.target.value +'; Path=/;';
+        window.location.href='/Overview'
+       // cookie.set("shopname", e.target.value, {path: "/", expires: d});
+    }
     
    //Call the Will Mount to set the auth Flag to false
    componentWillMount(){
@@ -196,9 +207,10 @@ class Home extends Component {
                         <button value={product.itemname} onClick={this.handleClickFavorites} class="btn btn-success" type="submit">Favorite</button>
                     </div>
                     <div style={{width: '10%'}}>
-                    <button onClick = {this.submitLogin} class="btn btn-success" type="submit">View</button>
+                    <button value={product.itemname} onClick = {this.handleOverviewClick} class="btn btn-success" type="submit">View</button>
                     </div>
                     </td>
+     
                
                 </tr>
             )

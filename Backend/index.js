@@ -431,6 +431,31 @@ app.post('/getallshop', function (req, res) {
     );
 });
 
+//get item for overview
+//get all items for landing
+app.post('/getitem', function (req, res) {
+    console.log("get all for landing")
+    console.log(req.body)
+    db.query(
+        "SELECT * From shop where itemname=? ",
+        [req.body.itemname],
+        (err, result) => {
+            console.log("geitem");
+            console.log(result);
+            console.log(err);
+            console.log("getitem");
+        if (result.length > 0 ){
+           // {user}JSON.stringify(books)
+            //return succes to front end
+            res.writeHead(201,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result));
+        }
+        }
+    );
+});
+
 //gets shopdata
 app.post('/shopdata', function (req, res) {
     console.log("shopdata")
@@ -582,6 +607,45 @@ app.post('/addfavorites', (req,res) => {
    // })
     
 });
+//insert cart
+app.post('/addcart', (req,res) => {
+    let username = req.body.username;
+    let itemname = req.body.itemname;
+    console.log("addfavorites")
+    console.log(req.body)
+    console.log("addfavorites")
+   // bcrypt.hash(password, saltRounds, (err, hash) => {
+        db.query(
+            "INSERT INTO cart (username,itemname) VALUES (?,?)",
+            [username,itemname],
+            (err, result) => {
+                console.log("result");
+                console.log(result);
+                console.log(err);
+                console.log("result");
+
+            if(err) {
+                res.send({err: err})
+            }
+            if (result){
+                //return succes to front end
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Successful Insert");
+            }
+            else{
+                //return unsuccesful to front end
+                res.writeHead(201,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end("Unsuccessful Insert");
+            }
+            }
+        );
+   // })
+    
+});
 //get favorites
 app.post('/getfavorites', (req,res) => {
     let username = req.body.username;
@@ -626,6 +690,7 @@ if (name.includes(",")) {
 
   }) 
 } else{
+  names=name;
   str += "itemname LIKE ? ";
 }
   console.log(name)
