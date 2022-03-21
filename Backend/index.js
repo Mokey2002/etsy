@@ -433,8 +433,11 @@ app.post('/getallshop', function (req, res) {
 
 //gets shopdata
 app.post('/shopdata', function (req, res) {
-
-    if(req.body.shopname ===null){
+    console.log("shopdata")
+    console.log(req.body)
+    console.log(req.body.shopname)
+    console.log("shopdata")
+    if(req.body.shopname ==undefined){
     db.query(
         "SELECT * From shop  where username =? ",
         [req.body.username],
@@ -459,21 +462,34 @@ app.post('/shopdata', function (req, res) {
         }
         }
 
-    );}
+    );
+}
     else{
+        console.log("here")
         db.query(
-            "SELECT * From shop  where shopname=?"
+            "SELECT * From shop  where shopname =? ",
             [req.body.shopname],
             (err, result) => {
-
-                console.log("exiting insert into shop")
-                //return unsuccesful to front end
+                console.log("shoopdata");
+                console.log(result);
+                console.log(err);
+                console.log("shoopdata");
+            if(err) {
+                res.send({err: err})
+            }
+            if (result.length > 0 ){
+               // {user}JSON.stringify(books)
+                //return succes to front end
+                console.log("******");
+                console.log(result);
+                console.log("******");
                 res.writeHead(201,{
                     'Content-Type' : 'text/plain'
                 })
                 res.end(JSON.stringify(result));
-
             }
+            }
+    
         );
     }
 

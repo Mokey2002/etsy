@@ -143,9 +143,9 @@ class Create extends Component {
         console.log(cookie.load('cookie'));
         console.log(cookie.load('shopname'));
         console.log("shop");
-        if(cookie.load('shopname')!==null){
-        document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-        }
+        //if(cookie.load('shopname')!==null){
+        //document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        //}
         axios.post('http://localhost:3001/shopdata',data)
                 .then((response) => {
 
@@ -156,6 +156,7 @@ class Create extends Component {
                             items : this.state.items.concat(response.data) 
                         })
                     } else if(response.status === 201){
+                        document.cookie = 'shopname' +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                         this.setState({
                             owner:false,
                             items : this.state.items.concat(response.data)  
