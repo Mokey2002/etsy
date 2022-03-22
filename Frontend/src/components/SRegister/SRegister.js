@@ -33,6 +33,8 @@ class Home extends Component {
                 shopname : this.state.shopname,
                 username: cookie.load('cookie')
             }
+           
+            document.cookie = "shopname" +'='+this.state.shopname +'; Path=/;';
             //send datat to backend
             axios.post('http://localhost:3001/check',data).then((response) => {
                 console.log(response.data);

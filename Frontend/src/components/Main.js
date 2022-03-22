@@ -13,7 +13,7 @@ import Shop from './Shop/Shop';
 import Purchases from './Mypurchases/Purchases';
 import Cart from './Cart/Cart';
 import Overview from './Overview/Overview';
-
+import MyShop from './MyShop/MyShop'
 
 //Create a Main Component
 class Main extends Component {
@@ -34,6 +34,7 @@ class Main extends Component {
                 <Route path="/purchases" component={Purchases}/>
                 <Route path="/cart" component={Cart}/>
                 <Route path="/overview" component={Overview}/>
+                <Route path="/myshop" component={MyShop}/>
             </div>
         )
     }

@@ -251,7 +251,7 @@ class Create extends Component{
                         <div style={{width: '100%'}} class="form-group">
 
                         <div class="text-center">
-                        {photo && <img src={photo} alt="img"/>}  <img src={au} class="rounded" ></img>
+                        {photo && <img src={photo} alt="img"/>} 
   <br></br>
   <label class="form-label" for="customFile">Change Profile picture</label>
 

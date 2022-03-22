@@ -72,12 +72,7 @@ class Home extends Component {
 
                     <h2>Favorite Items</h2>
 
-<div class="d-inline ">
-  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  <button type="button" class="btn btn-primary">
-  <FontAwesomeIcon icon={faSearch} />
-  </button>
-</div>
+
 <form class="form-inline">
   <div class="form-group ">
     <label for="inputPassword2" class="sr-only">Password</label>
@@ -89,9 +84,9 @@ class Home extends Component {
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Book ID</th>
-                                    <th>Title</th>
-                                    <th>Author</th>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Description</th>
                                 </tr>
                             </thead>
                             <tbody>

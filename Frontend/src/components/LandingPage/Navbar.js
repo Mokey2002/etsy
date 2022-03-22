@@ -58,7 +58,7 @@ class Navbar extends Component {
                     </div>
                     <ul class="nav navbar-nav">
                         <li class="active"><Link to="/home">Home</Link></li>
-                
+                    
                     </ul>
                   
   <div class="form-group ">

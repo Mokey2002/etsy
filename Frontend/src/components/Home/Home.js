@@ -169,7 +169,7 @@ class Home extends Component {
     //set the with credentials to true
     axios.defaults.withCredentials = true;
     //make a post request with the user data
-    axios.post('http://localhost:3001/getallshop',data)
+    axios.post('http://localhost:3001/getfiletered',data)
         .then(res => {
             if(res){
                 console.log(res)
@@ -199,7 +199,7 @@ class Home extends Component {
                     <td>{product.description}</td>
                     <td>
    
-                    <Link to="/shop" Shop dataFromParent = {product.shopname}  className="btn btn-primary">{product.shopname}</Link>
+                   
                     <button value={product.shopname} onClick={this.handleshopclick} class="btn btn-success" type="submit">{product.shopname}</button>
                     </td>
                     <td>
@@ -224,7 +224,7 @@ class Home extends Component {
             <div>
                 {redirectVar}
                 <div class="container">
-                    <h2>Welcome to home Page</h2>
+                    <h2>All Items</h2>
                     <br/>
                         <div style={{width: '30%'}} class="form-group">
                                 <input onChange = {this.termChangeHandler} type="text" class="form-control" name="term" placeholder="Search..."/>

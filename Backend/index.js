@@ -56,7 +56,8 @@ app.post("/api/image",upload.single('image'),(req,res,err)=>{
 
     console.log("UPDATE USER IMAGE")
    // console.log(res)
-    console.log(req.body.username[0])
+    console.log(req.body.username)
+    console.log(req.body.username)
    // console.log(res)
    console.log(req.body)
    console.log(req.file);
@@ -66,8 +67,8 @@ app.post("/api/image",upload.single('image'),(req,res,err)=>{
     else{
 
         db.query(
-            "Update user SET  photo =? where User =?",
-            [req.file.originalname, req.body.username],
+            "Update shop SET  photo =? where username =? and shopname=? and price is NULL ",
+            [req.file.originalname, req.body.username,req.body.shopname],
             (err, result) => {
                 console.log("result");
                 console.log(result);
@@ -372,9 +373,12 @@ app.post('/delete', function (req, res) {
 });
 //check if shopname is valid
 app.post('/check', function (req, res) {
+    console.log("cheeeeeeeeeeeeeeeeeeek")
+    console.log(req.body)
+    console.log("cheeeeeeeeeeeeeeeeeeek")
     db.query(
-        "SELECT * From shop  where username =? and shopname=?",
-        [req.body.username,req.body.shopname],
+        "SELECT * From shop  where shopname=?",
+        [req.body.shopname],
         (err, result) => {
             console.log("result");
             console.log(result);
@@ -412,7 +416,7 @@ app.post('/check', function (req, res) {
 app.post('/getallshop', function (req, res) {
     console.log("get all for landing")
     db.query(
-        "SELECT * From shop ",
+        "SELECT * From shop where itemname is not  NULL",
         [],
         (err, result) => {
             console.log("result");
@@ -430,7 +434,28 @@ app.post('/getallshop', function (req, res) {
         }
     );
 });
-
+//get filtered items
+app.post('/getfiletered', function (req, res) {
+    console.log("get all for landing")
+    db.query(
+        "SELECT * From shop where itemname is not  NULL and itemname Like ?",
+        ['%'+req.body.term+'%'],
+        (err, result) => {
+            console.log("result");
+            console.log(result);
+            console.log(err);
+            console.log("result");
+        if (result.length > 0 ){
+           // {user}JSON.stringify(books)
+            //return succes to front end
+            res.writeHead(201,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result));
+        }
+        }
+    );
+});
 //get item for overview
 //get all items for landing
 app.post('/getitem', function (req, res) {
@@ -464,7 +489,7 @@ app.post('/shopdata', function (req, res) {
     console.log("shopdata")
     if(req.body.shopname ==undefined || req.body.shopname=='' ){
     db.query(
-        "SELECT * From shop  where username =?",
+        "SELECT * From shop  where username =? and itemname is not NULL",
         [req.body.username],
         (err, result) => {
             console.log("shoopdata");
@@ -492,7 +517,7 @@ app.post('/shopdata', function (req, res) {
     else{
         console.log("here")
         db.query(
-            "SELECT * From shop  where shopname =? and username=?",
+            "SELECT * From shop  where shopname =? and username=? ",
             [req.body.shopname,req.body.username],
             (err, result) => {
                 console.log("shoopdata");
@@ -515,8 +540,105 @@ app.post('/shopdata', function (req, res) {
             }
             else{
                 db.query(
-                    "SELECT * From shop  where shopname =?",
-                    [req.body.shopname,req.body.username],
+                    "SELECT * From shop  where shopname =? ",
+                    [req.body.shopname],
+                    (err, result) => {
+                        console.log("shoopdata111111");
+                        console.log(result);
+                        console.log(err);
+                        console.log("shoopdata111111");
+                    if(err) {
+                        res.send({err: err})
+                    }
+                    if (result.length > 0 ){
+                       // {user}JSON.stringify(books)
+                        //return succes to front end
+                        console.log("******");
+                        console.log(result);
+                        console.log("******");
+                        res.writeHead(201,{
+                            'Content-Type' : 'text/plain'
+                        })
+                        res.end(JSON.stringify(result));
+                    }
+                    else{
+        
+        
+        
+                        
+                    }
+                    }
+            
+                );
+
+            }
+            }
+    
+        );
+    }
+
+});
+//get image
+app.post('/shopdataphoto', function (req, res) {
+    console.log("shopdata")
+    console.log(req.body)
+    console.log(req.body.shopname)
+    console.log("shopdata")
+    if(req.body.shopname ==undefined || req.body.shopname=='' ){
+    db.query(
+        "SELECT * From shop  where username =? and itemname is not NULL",
+        [req.body.username],
+        (err, result) => {
+            console.log("shoopdata");
+            console.log(result);
+            console.log(err);
+            console.log("shoopdata");
+        if(err) {
+            res.send({err: err})
+        }
+        if (result.length > 0 ){
+           // {user}JSON.stringify(books)
+            //return succes to front end
+            console.log("******");
+            console.log(result);
+            console.log("******");
+            res.writeHead(200,{
+                'Content-Type' : 'text/plain'
+            })
+            res.end(JSON.stringify(result));
+        }
+        }
+
+    );
+}
+    else{
+        console.log("here")
+        db.query(
+            "SELECT * From shop  where shopname =? and username=? ",
+            [req.body.shopname,req.body.username],
+            (err, result) => {
+                console.log("shoopdata");
+                console.log(result);
+                console.log(err);
+                console.log("shoopdata");
+            if(err) {
+                res.send({err: err})
+            }
+            if (result.length > 0 ){
+               // {user}JSON.stringify(books)
+                //return succes to front end
+                console.log("--------------");
+                console.log(result[0]);
+                console.log("-------");
+                res.writeHead(200,{
+                    'Content-Type' : 'text/plain'
+                })
+                res.end(JSON.stringify(result));
+            }
+            else{
+                db.query(
+                    "SELECT * From shop  where shopname =? ",
+                    [req.body.shopname],
                     (err, result) => {
                         console.log("shoopdata");
                         console.log(result);
@@ -526,6 +648,7 @@ app.post('/shopdata', function (req, res) {
                         res.send({err: err})
                     }
                     if (result.length > 0 ){
+
                        // {user}JSON.stringify(books)
                         //return succes to front end
                         console.log("******");
